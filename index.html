@@ -1,0 +1,1920 @@
+
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FRENGLE WORK MASTER</title>
+  <style>
+    :root{
+      --bg:#f5f3ee; --panel:#fffefa; --text:#171717; --muted:#6c6a66;
+      --line:#dfddd6; --soft:#eeece6; --accent:#111; --tag:#ece9e2;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);
+      font-family:Inter,Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      line-height:1.58}
+    .wrap{max-width:1180px;margin:0 auto;padding:34px 22px 80px}
+    header{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin-bottom:24px}
+    h1{font-size:42px;line-height:1.02;margin:0;letter-spacing:-1.5px}
+    .subtitle{margin-top:10px;color:var(--muted);font-size:14px}
+    .stamp{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:8px 10px;border-radius:999px}
+    .hero{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;margin-bottom:20px}
+    .hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .hero-card{background:var(--soft);border-radius:16px;padding:18px}
+    .hero-card b{display:block;font-size:18px;margin-bottom:6px}
+    .hero-card span{font-size:13px;color:var(--muted)}
+    nav{position:sticky;top:0;z-index:20;background:rgba(245,243,238,.92);
+      backdrop-filter:blur(10px);padding:12px 0;margin:6px 0 18px}
+    .tabs{display:flex;gap:8px;overflow:auto;padding-bottom:2px}
+    .tab{white-space:nowrap;border:1px solid var(--line);background:var(--panel);padding:9px 12px;
+      border-radius:999px;cursor:pointer;font-size:13px}
+    .tab.active{background:#111;color:#fff;border-color:#111}
+    section{display:none}
+    section.active{display:block}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+    .card{grid-column:span 6;background:var(--panel);border:1px solid var(--line);
+      border-radius:18px;padding:20px}
+    .card.full{grid-column:1/-1}
+    .card.third{grid-column:span 4}
+    h2{font-size:24px;margin:0 0 14px;letter-spacing:-.5px}
+    h3{font-size:17px;margin:0 0 10px}
+    p{margin:8px 0}
+    .muted{color:var(--muted);font-size:13px}
+    .rule{border-top:1px solid var(--line);margin:16px 0}
+    ul{margin:8px 0 0;padding-left:18px}
+    li{margin:5px 0}
+    .pill{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;
+      background:var(--tag);font-size:12px;margin:2px 4px 2px 0}
+    .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .node{background:var(--soft);border-radius:12px;padding:10px 12px;font-size:13px}
+    .arrow{color:var(--muted)}
+    .prompt{position:relative;background:#161616;color:#f7f7f7;border-radius:16px;
+      padding:18px 18px 54px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+      font-size:12.5px;line-height:1.65}
+    .copy{position:absolute;right:12px;bottom:12px;border:1px solid #444;background:#222;color:#fff;
+      border-radius:10px;padding:7px 10px;cursor:pointer}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left;vertical-align:top}
+    th{color:var(--muted);font-weight:600}
+    .check{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line)}
+    .check input{margin-top:4px}
+    .kpi{font-size:27px;font-weight:750;letter-spacing:-1px}
+    .note{background:#f0eee8;border-left:3px solid #111;padding:12px 14px;border-radius:8px;font-size:13px}
+    .bad{background:#f5e9e7}.good{background:#eaf0e8}
+    .mini{font-size:12px;color:var(--muted)}
+    @media(max-width:820px){
+      h1{font-size:34px}.hero-grid{grid-template-columns:1fr}
+      .card,.card.third{grid-column:1/-1}
+      header{grid-template-columns:1fr}
+    }
+  
+    details.prompt-card{grid-column:span 6;background:var(--panel);border:1px solid var(--line);
+      border-radius:18px;overflow:hidden}
+    details.prompt-card.full{grid-column:1/-1}
+    details.prompt-card summary{list-style:none;cursor:pointer;padding:18px 20px;font-weight:750;
+      display:flex;justify-content:space-between;gap:16px;align-items:center}
+    details.prompt-card summary::-webkit-details-marker{display:none}
+    details.prompt-card summary:after{content:"＋";font-size:20px;font-weight:400}
+    details.prompt-card[open] summary:after{content:"−"}
+    details.prompt-card .inside{padding:0 20px 20px}
+    .matrix td:first-child,.matrix th:first-child{white-space:nowrap}
+    .priority{display:inline-block;font-weight:800;font-size:11px;padding:4px 7px;border-radius:999px;background:#111;color:white}
+    .risk-high{background:#f3ded9}.risk-mid{background:#f0ead5}.risk-low{background:#e6eee3}
+    .decision{background:#f7f4ec;border:1px dashed #cfc9bc;border-radius:14px;padding:14px}
+    .code-label{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;background:#ece9e2;
+      border-radius:7px;padding:3px 6px}
+    @media(max-width:820px){details.prompt-card{grid-column:1/-1}}
+
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>FRENGLE<br>WORK MASTER</h1>
+      <div class="subtitle">업무 판단 · 콘텐츠 · B2B · 자동화 · 운영을 한 파일에서 관리하는 기준서</div>
+    </div>
+    <div class="stamp">v5 · 2026.10 · Automation Briefing + MD System</div>
+  </header>
+
+  <div class="hero">
+    <div class="hero-grid">
+      <div class="hero-card"><b>1. 자동화는 반복업무부터</b><span>수집·검증·변환·업로드는 자동화. 방향·훅·최종 판단은 사람이.</span></div>
+      <div class="hero-card"><b>2. 콘텐츠는 역할을 나눈다</b><span>도달 / 공유 / 저장 / 전환을 하나의 포맷에 다 맡기지 않는다.</span></div>
+      <div class="hero-card"><b>3. B2B는 배치로 돌린다</b><span>한 번에 500개가 아니라 50~100개 단위 수집 → 검증 → MASTER 반영.</span></div>
+    </div>
+  </div>
+
+  <nav><div class="tabs">
+    <button class="tab active" data-tab="dash">DASHBOARD</button>
+    <button class="tab" data-tab="content">CONTENT</button>
+    <button class="tab" data-tab="router">CONTENT ROUTER</button>
+    <button class="tab" data-tab="codeaudit">CODE AUDIT</button>
+    <button class="tab" data-tab="automation">AUTOMATION / BRIEFING</button>
+    <button class="tab" data-tab="mdsystem">MD SYSTEM</button>
+    <button class="tab" data-tab="b2b">B2B</button>
+    <button class="tab" data-tab="blog">BLOG / SEO</button>
+    <button class="tab" data-tab="ops">OPS / QA</button>
+    <button class="tab" data-tab="tools">TOOL MAP</button>
+    <button class="tab" data-tab="prompts">PROMPTS</button>
+  </div></nav>
+
+  <section id="dash" class="active">
+    <div class="grid">
+      <div class="card third">
+        <div class="mini">NOW #1</div><div class="kpi">콘텐츠 훅 개편</div>
+        <p class="muted">“영어로 뭐라고 하지?” 비중 축소. 상황형·반전형·감정형을 먼저 테스트.</p>
+      </div>
+      <div class="card third">
+        <div class="mini">NOW #2</div><div class="kpi">B2B 파이프라인</div>
+        <p class="muted">수집보다 검증 자동화까지 포함. 유효 연락처·출처 URL 필수.</p>
+      </div>
+      <div class="card third">
+        <div class="mini">NOW #3</div><div class="kpi">멀티채널 재활용</div>
+        <p class="muted">원본 1개 → 캐러셀·릴스·클립·블로그·칼럼으로 변환.</p>
+      </div>
+
+      <div class="card">
+        <h2>자동화 판단 기준</h2>
+        <table>
+          <tr><th>질문</th><th>YES면</th></tr>
+          <tr><td>같은 형식으로 3번 이상 반복하는가?</td><td>자동화 후보</td></tr>
+          <tr><td>사람의 취향·맥락 판단이 핵심인가?</td><td>최종 판단 유지</td></tr>
+          <tr><td>오류 시 비용이 큰가?</td><td>검수 단계 추가</td></tr>
+          <tr><td>성과 측정 가능한가?</td><td>기록 → 다음 판단 자동화</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>업무 배분 원칙</h2>
+        <div class="pill">자동화 80~100%</div><div class="pill">수집</div><div class="pill">검증</div><div class="pill">변환</div><div class="pill">업로드</div>
+        <div class="rule"></div>
+        <div class="pill">자동화 50~70%</div><div class="pill">콘텐츠 초안</div><div class="pill">제안서 초안</div><div class="pill">아웃리치 개인화</div>
+        <div class="rule"></div>
+        <div class="pill">사람이 결정</div><div class="pill">훅 선택</div><div class="pill">우선순위</div><div class="pill">브랜드 결</div><div class="pill">최종 발송</div>
+      </div>
+
+      <div class="card full">
+        <h2>내일 바로 할 것</h2>
+        <label class="check"><input type="checkbox" data-key="d_auto1"><span><b>[P1] 자동 브리핑 설계</b> — Trial 전환 / B2B / 콘텐츠 성과 중 최소 1개를 “숫자 → 이상징후 → 다음 액션” 형태로 자동화한다.</span></label>
+        <label class="check"><input type="checkbox" data-key="d_md1"><span><b>[P1] MD 기준서 시작</b> — 코드 검진 후 <code>ARCHITECTURE.md</code>와 <code>DATA_DICTIONARY.md</code>부터 생성한다.</span></label>
+        <label class="check"><input type="checkbox" data-key="d0"><span><b>[P0] 홈페이지 + Desk 코드 검진</b> — 구조 맵 → 데이터 흐름 → 자동화 의존성 → Vercel/Railway freshness 원인 순서로 먼저 점검. 바로 리팩터링하지 말고 진단 결과부터 남기기.</span></label>
+        <label class="check"><input type="checkbox" data-key="d1"><span>캐러셀 생성 지침에서 <b>번역형 훅 비중 축소</b>, 상황형/반전형/감정형 훅 생성 규칙 추가</span></label>
+        <label class="check"><input type="checkbox" data-key="d2"><span>프렌글 콘텐츠 주제 10개 입력 → 각 주제별 훅 5개씩 뽑기</span></label>
+        <label class="check"><input type="checkbox" data-key="d3"><span>B2B 후보 100개 수집 → 검증 파이프라인으로 통과율 측정</span></label>
+        <label class="check"><input type="checkbox" data-key="d4"><span>B2B MASTER 시트에 출처 URL / 확인일 / 검증상태 / 컨택상태 열 추가</span></label>
+        <label class="check"><input type="checkbox" data-key="d5"><span>블로그는 Work 업로드 플로우로 넘기고 수동 편집 시간을 최소화</span></label>
+      </div>
+    </div>
+  </section>
+
+  <section id="content">
+    <div class="grid">
+      <div class="card full">
+        <h2>콘텐츠 역할 분담</h2>
+        <table>
+          <tr><th>역할</th><th>포맷</th><th>성공 기준</th><th>자동화</th></tr>
+          <tr><td><b>도달</b></td><td>셀럽 영어 / 인터뷰 / 화제 소재</td><td>비팔로워 도달, 재생</td><td>30~50%</td></tr>
+          <tr><td><b>공유</b></td><td>밈 / 직장인 상황 / 감정형 영어</td><td>공유/도달</td><td>60~70%</td></tr>
+          <tr><td><b>저장</b></td><td>실전 표현 / 비교 / 짧은 캐러셀</td><td>저장/도달</td><td>80~90%</td></tr>
+          <tr><td><b>전환</b></td><td>전화영어 문제 / 프렌글 학습 방식</td><td>프로필 방문, 신청</td><td>50~70%</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>첫 장 훅 규칙</h2>
+        <p><b>기본:</b> 영어 자체보다 “내 얘기 같다”를 먼저 만든다.</p>
+        <div class="note good"><b>추천</b><br>상황형 · 오해형 · 반전형 · 감정형 · 실제 한국어형</div>
+        <div style="height:10px"></div>
+        <div class="note bad"><b>축소</b><br>“OO 영어로 뭐라고 하지?” / “원어민 표현 N가지” / 교과서식 제목</div>
+      </div>
+
+      <div class="card">
+        <h2>훅 테스트 방식</h2>
+        <p><b>A 번역형</b> — “애매하다 영어로 뭐라고 하지?”</p>
+        <p><b>B 상황형</b> — “소개팅 어땠냐는데 좋지도 싫지도 않을 때”</p>
+        <p><b>C 반전형</b> — “‘애매하다’ = ambiguous, 이렇게 외웠다면 절반만 맞음”</p>
+        <p class="muted">같은 난이도의 소재로 4~5개씩 테스트 후 비팔로워 도달·공유/도달·저장/도달 비교.</p>
+      </div>
+
+      <div class="card full">
+        <h2>콘텐츠 파이프라인</h2>
+        <div class="flow">
+          <div class="node">주제 입력</div><div class="arrow">→</div>
+          <div class="node">훅 5종 생성</div><div class="arrow">→</div>
+          <div class="node">사람이 1개 선택</div><div class="arrow">→</div>
+          <div class="node">캐러셀 / 릴스 생성</div><div class="arrow">→</div>
+          <div class="node">멀티채널 변환</div><div class="arrow">→</div>
+          <div class="node">성과 수집</div><div class="arrow">→</div>
+          <div class="node">다음 주제 추천</div>
+        </div>
+      </div>
+
+      <div class="card full">
+        <h2>캐러셀 작성 체크리스트</h2>
+        <label class="check"><input type="checkbox" data-key="c1"><span>첫 장만 보고도 상황이 즉시 이해되는가?</span></label>
+        <label class="check"><input type="checkbox" data-key="c2"><span>영어를 몰라도 “내 이야기 같다”는 느낌이 드는가?</span></label>
+        <label class="check"><input type="checkbox" data-key="c3"><span>2장 안에 실제 표현이 등장하는가?</span></label>
+        <label class="check"><input type="checkbox" data-key="c4"><span>표현 뜻이 직역이 아니라 “진짜 느낌”으로 설명되는가?</span></label>
+        <label class="check"><input type="checkbox" data-key="c5"><span>마지막 장 CTA가 과하게 광고처럼 보이지 않는가?</span></label>
+      </div>
+    </div>
+  </section>
+
+  
+  <section id="router">
+    <div class="grid">
+      <div class="card full">
+        <h2>FRENGLE CONTENT ROUTER</h2>
+        <p><b>주제만 넣어도 콘텐츠 원본부터 생성</b>하고, 이미 원본이 있으면 먼저 분석한다. 이후 <b>유형 판정 → 채널 적합도 → 재가공 방식</b>을 결정해 필요한 채널만 발행한다.</p>
+        <table class="matrix">
+          <tr><th>원본 유형</th><th>Instagram</th><th>YouTube Shorts</th><th>Naver Clip</th><th>Column</th><th>Naver Blog</th></tr>
+          <tr><td><b>CELEB</b><br><span class="mini">셀럽 실제 영어</span></td><td>◎ Reel</td><td><b>◎ 핵심</b></td><td>△ 표현만 재가공</td><td>△ 검색가치 있을 때</td><td>△ 검색가치 있을 때</td></tr>
+          <tr><td><b>LEARN</b><br><span class="mini">문법·표현·뉘앙스</span></td><td>◎ Carousel/Reel</td><td>△ 선별</td><td><b>◎ 카드뉴스 영상</b></td><td>◎</td><td>◎</td></tr>
+          <tr><td><b>SITUATION</b><br><span class="mini">직장인 상황 영어</span></td><td><b>◎</b></td><td>○</td><td><b>◎ 카드형</b></td><td>◎</td><td>◎</td></tr>
+          <tr><td><b>BRAND</b><br><span class="mini">학습문제·프렌글</span></td><td>○</td><td>△</td><td>○</td><td><b>◎</b></td><td>○</td></tr>
+        </table>
+        <p class="mini">◎ 기본 발행 · ○ 소재 적합 시 · △ 억지로 발행하지 않음</p>
+      </div>
+
+      <div class="card">
+        <h2>채널별 역할</h2>
+        <p><b>Instagram</b> — 멈추게 만들기. 상황·감정·반전 훅 우선.</p>
+        <p><b>YouTube Shorts</b> — 셀럽 실제 발화/영상 기반 도달.</p>
+        <p><b>Naver Clip</b> — 카드뉴스형 문법·표현 정보 + 검색 키워드.</p>
+        <p><b>Column</b> — 사이트 안에 쌓이는 짧고 명확한 검색 자산.</p>
+        <p><b>Naver Blog</b> — 검색자의 질문에 더 자세히 답하는 확장판.</p>
+      </div>
+
+      <div class="card">
+        <h2>재활용 원칙</h2>
+        <div class="flow">
+          <div class="node">소재 카드</div><div class="arrow">→</div>
+          <div class="node">IG / YT 원본</div><div class="arrow">→</div>
+          <div class="node">Clip 핵심 3~5장</div><div class="arrow">→</div>
+          <div class="node">Column</div><div class="arrow">→</div>
+          <div class="node">Blog 확장</div>
+        </div>
+        <p class="muted">원본 1개당 새로 만드는 자산을 최소화하고, 이미 만든 카드·문장·예시를 채널 문법에 맞춰 재배치한다.</p>
+      </div>
+
+      <div class="card full">
+        <h2>기본 실행 순서</h2>
+        <div class="flow">
+          <div class="node">① 주제/원본 입력</div><div class="arrow">→</div>
+          <div class="node">② 원본 콘텐츠 생성/분석</div><div class="arrow">→</div>
+          <div class="node">③ 유형 판정</div><div class="arrow">→</div>
+          <div class="node">④ 채널 적합도 판단</div><div class="arrow">→</div>
+          <div class="node">⑤ Nina 훅 승인</div><div class="arrow">→</div>
+          <div class="node">⑥ 채널별 가공</div><div class="arrow">→</div>
+          <div class="node">⑦ Work 업로드</div><div class="arrow">→</div>
+          <div class="node">⑧ 성과 기록</div>
+        </div>
+      </div>
+
+      <details class="prompt-card full" open>
+        <summary>MASTER · 콘텐츠 생성 + 배포 라우터 프롬프트</summary>
+        <div class="inside"><div class="prompt" id="router_master">FRENGLE CONTENT CREATION & DISTRIBUTION ROUTER
+
+너는 프렌글의 멀티채널 콘텐츠 디렉터다.
+
+내가 ① 콘텐츠 주제만 입력하거나, ② 이미 만든 원본 콘텐츠를 입력하면
+먼저 ‘콘텐츠 자체’를 완성한 뒤, 그 콘텐츠가 어떤 채널에 적합한지 판단하고,
+필요한 채널에만 맞춤 가공한다.
+
+모든 채널에 기계적으로 재활용하지 않는다.
+반드시 “콘텐츠 생성 → 유형 판정 → 채널 적합도 판단 → 채널별 가공 → 재사용 계획 → 실행 순서” 순서로 작업한다.
+
+
+━━━━━━━━━━━━━━━━━━━━
+0. 먼저 콘텐츠 원본을 만든다
+━━━━━━━━━━━━━━━━━━━━
+
+[주제만 입력된 경우]
+먼저 아래를 만들어라.
+
+- 콘텐츠 핵심 주제
+- 타깃
+- 사용자가 겪는 실제 상황/문제
+- 핵심 영어 표현/문법/뉘앙스
+- 이 콘텐츠가 주는 한 가지 명확한 배움
+- 첫 훅 5개
+  · 상황형 2개
+  · 반전형 1개
+  · 감정형 1개
+  · 검색/정보형 1개
+- 최종 추천 훅 1개
+- 본문/스크립트/장별 카피 초안
+- CTA
+- 이 콘텐츠의 1차 목적: 도달 / 공유 / 저장 / 검색 / 전환 중 선택
+
+“OO 영어로 뭐라고 하지?” 형식은 기본값으로 쓰지 않는다.
+영어 정보보다 “내 이야기 같다 / 이 상황 안다 / 뭐지?”라는 반응을 먼저 만든다.
+
+[이미 원본 콘텐츠가 입력된 경우]
+원본을 분석하여
+- 현재 콘텐츠 유형
+- 핵심 메시지
+- 가장 강한 부분
+- 약한 부분
+- 첫 훅 개선 필요 여부
+를 먼저 판단한 뒤 필요한 만큼만 수정한다.
+
+
+━━━━━━━━━━━━━━━━━━━━
+1. 콘텐츠 유형을 분류한다
+━━━━━━━━━━━━━━━━━━━━
+
+다음 중 하나 또는 복수로 판정한다.
+
+A. CELEB
+셀럽 인터뷰, 실제 영어 발화, 화제성 있는 영상 소재
+주요 목적: 도달
+
+B. LEARN
+영어 표현, 문법, 뉘앙스, 직장 영어, 실전 회화
+주요 목적: 저장·공유·검색
+
+C. SITUATION
+직장인/학습자의 실제 상황, 감정, 반응을 중심으로 영어를 설명하는 콘텐츠
+주요 목적: 공감·공유·도달
+
+D. BRAND
+영어 학습 문제, 말하기 장벽, 전화영어, 프렌글 방식 및 서비스
+주요 목적: 신뢰·전환
+
+
+━━━━━━━━━━━━━━━━━━━━
+2. 채널별 발행 적합도를 먼저 판단한다
+━━━━━━━━━━━━━━━━━━━━
+
+아래 표를 반드시 먼저 출력한다.
+
+| 채널 | 발행 여부 | 적합도 | 추천 포맷 | 이 채널에 올리는 이유 | 새 제작/재활용 |
+
+발행 여부:
+- 필수
+- 선택
+- 생략
+
+적합도:
+- 매우 높음
+- 높음
+- 보통
+- 낮음
+
+불필요한 채널까지 콘텐츠를 만들지 않는다.
+
+
+[Instagram]
+
+CELEB → Reel 적극 활용
+LEARN → Carousel 또는 짧은 Reel
+SITUATION → Carousel/Reel 적극 활용
+BRAND → Carousel/Reel
+
+첫 훅은 교육 정보보다 상황·감정·오해·반전을 우선한다.
+“OO 영어로 뭐라고 하지?” 형식을 반복적으로 사용하지 않는다.
+
+
+[YouTube Shorts]
+
+CELEB 콘텐츠를 우선한다.
+실제 발화, 인물, 상황이 있는 영상 중심.
+단순 문법 카드뉴스는 억지로 업로드하지 않는다.
+
+LEARN/SITUATION도 영상성이 충분하고 짧게 설명 가능한 경우에만 선택한다.
+
+
+[Naver Clip]
+
+LEARN과 SITUATION 콘텐츠를 최우선으로 한다.
+
+셀럽 영상 자체보다
+문법·표현·뉘앙스가 명확히 드러나는
+카드뉴스 영상 형태를 우선한다.
+
+Instagram 캐러셀이 있으면 그대로 복제하지 않고
+핵심 3~5장으로 압축한다.
+
+9:16 세로 영상 기준.
+
+첫 화면에서
+- 검색 키워드
+- 배울 문법/표현
+이 바로 보여야 한다.
+
+제목과 태그는
+프렌글 SEO/파워링크 키워드와 연계한다.
+
+
+[Frengle Column]
+
+LEARN / SITUATION / BRAND 중
+검색 가치가 있는 주제를 작성한다.
+
+짧고 명확하며 사이트에서 읽기 좋은 구조.
+관련 콘텐츠 및 서비스로 내부 연결하기 좋게 구성한다.
+
+
+[Naver Blog]
+
+LEARN / SITUATION / BRAND 중
+검색 의도가 있는 주제를 발행한다.
+
+Column을 그대로 복사하지 않는다.
+
+검색자의 질문에 더 자세히 답하도록 확장한다.
+
+추가할 수 있는 항목:
+- 실제 상황
+- 표현 뜻
+- 문법 포인트
+- 예문
+- 유사 표현 차이
+- 사용 시 주의점
+- 직장/일상 적용 예시
+
+과하게 상업적인 문체는 사용하지 않는다.
+
+
+━━━━━━━━━━━━━━━━━━━━
+3. 발행할 채널별 콘텐츠를 만든다
+━━━━━━━━━━━━━━━━━━━━
+
+필수 또는 선택으로 판정된 채널만 제작한다.
+
+
+[Instagram]
+
+- 콘텐츠 유형
+- 첫 장/첫 2초 훅 5개
+- 최종 추천 훅
+- Carousel이면 장별 카피
+- Reel이면 컷/자막/스크립트 구성
+- 캡션
+- CTA
+- 저장/공유/도달 중 기대 행동
+
+
+[YouTube Shorts]
+
+필요한 경우에만:
+
+- 제목 5개
+- 추천 제목
+- 첫 2초
+- 편집 구성
+- 화면 자막
+- 설명
+- 핵심 영어 포인트
+
+
+[Naver Clip]
+
+필요한 경우:
+
+- 검색형 제목 5개
+- 추천 제목
+- 첫 화면 문구
+- 카드 1~5 문구
+- 각 카드 노출 시간
+- 간단한 움직임/전환
+- 캡션
+- 키워드/태그
+- 사용할 Instagram/Column 자산 표시
+
+
+[Frengle Column]
+
+필요한 경우:
+
+- 제목 3개
+- URL slug 후보
+- 본문
+- 핵심 키워드
+- 내부 링크 후보
+- 메타 설명
+
+
+[Naver Blog]
+
+필요한 경우:
+
+- 검색형 제목 후보 5개
+- 추천 제목
+- 메인 키워드
+- 서브 키워드
+- 검색 의도
+- 완성 본문
+- H2/H3 구조
+- 이미지가 들어갈 위치
+- 각 이미지에 들어갈 문구
+- Column 또는 프렌글 페이지 연결 위치
+- 태그 후보
+
+
+━━━━━━━━━━━━━━━━━━━━
+4. 자산 재사용 계획을 만든다
+━━━━━━━━━━━━━━━━━━━━
+
+새로 만들 필요가 없는 것은 만들지 않는다.
+
+예:
+
+Instagram Carousel 핵심 3~5장
+→ Naver Clip 영상으로 재활용
+
+Column 핵심 설명
+→ Blog 본문 확장
+
+Instagram Reel 원본
+→ YouTube Shorts 재활용
+
+Blog용 이미지
+→ Column/Clip에서 재사용 가능 여부
+
+마지막에 반드시:
+
+[새 제작 필요]
+[기존 자산 재활용]
+[재가공만 필요]
+
+세 항목으로 정리한다.
+
+
+━━━━━━━━━━━━━━━━━━━━
+5. 최종 실행 순서를 출력한다
+━━━━━━━━━━━━━━━━━━━━
+
+사람이 결정해야 하는 작업과
+자동화 가능한 작업을 분리한다.
+
+기본 예:
+
+1. Nina — 주제/최종 훅 선택
+2. ChatGPT — 원본 콘텐츠 + 채널별 원고 생성
+3. ChatGPT / Canva — 이미지·카드 자산 제작
+4. Work — Blog/웹 기반 채널 업로드
+5. Clip/Instagram/YouTube용 업로드 패키지 준비
+6. 게시 후 성과 기록
+7. 다음 콘텐츠에 성과 피드백 반영
+
+
+━━━━━━━━━━━━━━━━━━━━
+6. 마지막 요약
+━━━━━━━━━━━━━━━━━━━━
+
+반드시 아래 형식으로 끝낸다.
+
+[이 콘텐츠의 핵심]
+- 유형:
+- 1차 목적:
+- 최종 추천 훅:
+
+[배포 추천]
+- Instagram:
+- YouTube Shorts:
+- Naver Clip:
+- Frengle Column:
+- Naver Blog:
+
+[최소 작업으로 가져가는 방법]
+- 새로 만들 것:
+- 재사용할 것:
+- 생략할 것:
+
+최우선 원칙:
+콘텐츠 개수를 늘리는 것이 아니라
+하나의 좋은 소재를 가장 적절한 채널에
+최소 작업으로 확장한다.<button class="copy" onclick="copyPrompt('router_master', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>CELEB · Instagram + YouTube</summary>
+        <div class="inside"><div class="prompt" id="prompt_celeb">다음 셀럽 실제 영어 원본을 프렌글 도달형 콘텐츠로 가공한다.
+
+[입력]
+- 셀럽/원본:
+- 실제 발화:
+- 영상 맥락:
+- 배울 표현:
+- 사용 가능한 영상 길이:
+
+[목표]
+셀럽 이름만 빌리지 말고 표정·상황·실제 발화를 훅으로 사용한다.
+
+[Instagram Reel]
+- 1~2초 훅 5개
+- 추천 훅 1개
+- 10~20초 편집 순서
+- 화면 자막
+- 표현의 실제 한국어 뉘앙스
+- 캡션
+- CTA
+
+[YouTube Shorts]
+- 검색/클릭을 함께 고려한 제목 5개
+- 첫 2초 자막
+- 설명
+- 해시태그 후보
+
+[추가 판단]
+이 표현이 Naver Clip/Column/Blog로 확장할 검색 가치가 있는지도 판정하라.
+확장한다면 셀럽 영상 자체를 복제하지 말고 ‘표현/문법 포인트’를 독립 콘텐츠로 재구성하라.<button class="copy" onclick="copyPrompt('prompt_celeb', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>LEARN · Instagram 캐러셀</summary>
+        <div class="inside"><div class="prompt" id="prompt_learn_ig">프렌글 Instagram용 LEARN 캐러셀을 만든다.
+
+[입력]
+- 주제:
+- 핵심 표현/문법:
+- 타깃:
+- 검색 키워드:
+- 참고 원본:
+
+[훅]
+‘영어 공부 정보’보다 ‘내 이야기 같다’를 먼저 만든다.
+상황형 2개 / 반전형 2개 / 감정형 1개를 제안한다.
+“OO 영어로 뭐라고 하지?”는 기본값으로 쓰지 않는다.
+
+[구성]
+- 1장: 훅
+- 2장: 왜 이 상황에서 헷갈리는지
+- 3~5장: 표현/문법 설명 + 실제 한국어 느낌
+- 필요하면 짧은 예문
+- 마지막: 과한 광고 없이 저장/적용 CTA
+
+[출력]
+1) 훅 5개
+2) 추천 훅
+3) 장별 카피
+4) 디자인에서 강조할 단어
+5) 캡션
+6) Naver Clip로 재사용할 핵심 3~5장 표시<button class="copy" onclick="copyPrompt('prompt_learn_ig', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>NAVER CLIP · 카드뉴스 영상</summary>
+        <div class="inside"><div class="prompt" id="prompt_clip">다음 프렌글 원본을 Naver Clip 카드뉴스 영상으로 가공한다.
+
+[입력]
+- 원본 콘텐츠:
+- 핵심 표현/문법:
+- 메인 검색 키워드:
+- 서브 키워드:
+- 재사용 가능한 Instagram 카드:
+
+[원칙]
+- 셀럽/감성 자체보다 ‘문법·표현 정보가 즉시 보이는 카드형’ 우선.
+- 9:16 세로 영상.
+- 3~5개 핵심 카드로 압축.
+- 첫 화면에서 검색 키워드와 배울 내용이 바로 보이게 한다.
+- 한 카드에 정보 과밀 금지.
+- 캐러셀 전체를 그대로 영상화하지 않는다.
+
+[출력]
+- 검색형 제목 5개
+- 추천 제목 1개
+- 카드 1~5 문구
+- 각 카드 노출 시간(초)
+- 움직임/전환 최소 지시
+- 설명문
+- 키워드/태그
+- 프렌글 칼럼/블로그와 연결할 수 있는 검색 주제
+- 기존 자산 재사용 여부<button class="copy" onclick="copyPrompt('prompt_clip', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>FRengle COLUMN · 사이트용</summary>
+        <div class="inside"><div class="prompt" id="prompt_column">다음 소재를 프렌글 공식 Column 원고로 작성한다.
+
+[입력]
+- 주제:
+- 핵심 키워드:
+- 핵심 표현/문법:
+- 관련 Instagram/Clip:
+- 연결할 프렌글 페이지:
+
+[톤]
+딱딱하거나 상업적이지 않게.
+‘내 이야기 같다’는 도입 + 실제 영어 뜻이 바로 이해되는 설명.
+짧고 가볍지만 교육 내용은 가볍게 보이지 않게.
+
+[구성]
+- 제목 후보 3개
+- slug 후보
+- 짧은 도입
+- 핵심 설명
+- 실제 예문/상황
+- 잘못 쓰기 쉬운 부분
+- 자연스러운 마무리
+- 내부 링크 위치
+- 메타 설명 초안
+
+블로그 원고와 똑같이 쓰지 말고 사이트에서 빠르게 읽히는 길이로 정리하라.<button class="copy" onclick="copyPrompt('prompt_column', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>NAVER BLOG · 검색 확장판</summary>
+        <div class="inside"><div class="prompt" id="prompt_blog">다음 프렌글 Column/콘텐츠를 Naver Blog 검색형 원고로 확장한다.
+
+[입력]
+- 원본:
+- 메인 키워드:
+- 서브 키워드:
+- 타깃 검색 의도:
+- 연결할 Column/서비스 URL:
+- 사용할 이미지 자산:
+
+[원칙]
+- Column 복붙 금지.
+- 검색자가 실제로 궁금해할 질문에 더 자세히 답한다.
+- 표현 뜻, 상황, 예문, 주의점, 유사 표현 차이를 필요한 만큼 추가한다.
+- 딱딱한 SEO 문체, 판박이 도입, 과도한 FAQ, 조사과정 노출을 피한다.
+- 프렌글 판매문처럼 보이지 않는다.
+
+[출력]
+- 제목 후보 5개
+- 추천 제목
+- 도입
+- H2/H3 구조
+- 완성 본문
+- 이미지 삽입 위치
+- 각 이미지에 들어갈 문구
+- 내부링크 위치
+- 태그/키워드
+- Work가 업로드할 때 확인할 체크리스트<button class="copy" onclick="copyPrompt('prompt_blog', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>BRAND · 문제 인식 + 전환</summary>
+        <div class="inside"><div class="prompt" id="prompt_brand">프렌글 BRAND 콘텐츠를 만든다.
+
+[입력]
+- 학습 문제:
+- 타깃:
+- 프렌글이 해결하는 방식:
+- 관련 기능/서비스:
+- CTA 강도: 약 / 중 / 강
+
+[목표]
+서비스를 먼저 설명하지 말고 사용자가 겪는 문제를 먼저 정확히 언어화한다.
+예: ‘영어는 알아듣는데 말이 안 나온다’, ‘수업 날만 영어를 한다’.
+
+[출력]
+- 문제 인식 훅 5개
+- 추천 훅
+- Instagram용 구성
+- Column용 구성
+- Blog 확장 여부
+- 프렌글로 연결되는 논리
+- 광고처럼 보이지 않는 CTA 3개
+- 발행 채널 필수/선택/생략 판정<button class="copy" onclick="copyPrompt('prompt_brand', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card full">
+        <summary>WORK · 업로드 실행 프롬프트</summary>
+        <div class="inside"><div class="prompt" id="prompt_work_upload">아래 FRENGLE CONTENT PACKAGE를 기준으로 실제 게시 작업을 진행한다.
+
+[실행 원칙]
+- ‘발행 여부=필수’인 채널부터 작업한다.
+- 선택 채널은 제공된 근거가 충분할 때만 진행한다.
+- 생략 채널은 건드리지 않는다.
+- 제공된 제목/본문/이미지/키워드/링크를 사용한다.
+- 이미 존재하는 자산은 다시 만들지 않는다.
+- 콘텐츠 방향을 임의로 바꾸지 않는다.
+
+[업로드 전 체크]
+- 제목/본문 누락
+- 이미지 순서와 비율
+- 이미지 중복
+- 내부링크/CTA
+- 카테고리
+- 태그/키워드
+- 모바일 가독성
+- 예약/발행 시간
+- 동일 콘텐츠 중복 게시 여부
+
+[완료 보고]
+채널 | 게시물 제목 | 게시/예약 상태 | URL | 발행 시간 | 추가 확인 필요사항
+
+로그인/권한/에디터 오류 등으로 진행할 수 없는 단계는 임의 우회하지 말고 막힌 단계와 원인을 명확히 남긴다.<button class="copy" onclick="copyPrompt('prompt_work_upload', this)">복사</button></div></div>
+      </details>
+    </div>
+  </section>
+
+
+  <section id="codeaudit">
+    <div class="grid">
+      <div class="card full">
+        <h2>CODE AUDIT · 내일 P0</h2>
+        <p>목표는 ‘예쁘게 리팩터링’이 아니라 <b>현재 서비스별 책임을 정확히 파악하고, 향후 사내 대시보드가 늘어나도 business logic이 분산되지 않는 기준선을 만드는 것</b>.</p>
+        <div class="note"><b>중요:</b> 첫 검진에서는 코드를 바로 대규모 수정하지 않는다. <b>구조 맵 → 위험도 분류 → 테스트 확보 → 수정 순서</b>를 먼저 만든다.</div>
+      </div>
+
+      <div class="card">
+        <h2>현재 구조 · 먼저 책임을 본다</h2>
+        <div class="flow">
+          <div class="node">Homepage</div><div class="arrow">→</div>
+          <div class="node">Main Dashboard</div><div class="arrow">→</div>
+          <div class="node">Reservation App / Railway</div><div class="arrow">→</div>
+          <div class="node">Supabase / Automation</div>
+        </div>
+        <p class="muted">중간 Reservation App이 존재한다는 사실 자체는 문제가 아니다. 이 계층이 <b>명확한 operational backend/API/worker 역할</b>을 수행하는지, 아니면 단순 freshness 우회용 legacy bridge인지 판정한다.</p>
+      </div>
+
+      <div class="card">
+        <h2>현재 배포 이슈</h2>
+        <p><span class="code-label">Main Dashboard → Vercel</span></p>
+        <p>즉시성이 필요한 backend/worker가 Vercel 쪽에 있어 수강권 등록·리캡처럼 즉시 반영돼야 하는 흐름이 매끄럽지 않고, 이를 보완하기 위해 기존 <span class="code-label">Reservation App → Railway</span>가 중간에 끼어 있음.</p>
+        <p class="muted">핵심 판단은 “중간 계층을 없앨 것인가?”가 아니라 <b>이 계층이 앞으로 구조를 단순하게 만드는 공통 backend인가, 복잡하게 만드는 legacy dependency인가</b>이다.</p>
+      </div>
+
+      <div class="card full">
+        <h2>Reservation App 판단 · 3가지 중 하나로 결론</h2>
+        <table>
+          <tr><th>판정</th><th>상태</th><th>행동</th></tr>
+          <tr><td><b>KEEP AS-IS</b></td><td>Railway 계층이 안정적이고 중복 로직이 없으며 역할이 명확함</td><td>그대로 유지. 문서화만 강화</td></tr>
+          <tr><td><b>KEEP &amp; REDEFINE</b></td><td>사실상 실시간 API/worker/backend인데 ‘예약앱’ 이름과 UI가 옛 구조를 끌고 감</td><td>공통 Operational Backend로 역할 재정의. UI/legacy 부분은 점진 제거</td></tr>
+          <tr><td><b>MIGRATE</b></td><td>단순 우회로이며 business logic·API·상태계산이 여러 곳에 중복됨</td><td>공통 backend로 기능 이관 후 legacy app 제거</td></tr>
+        </table>
+        <div class="decision">
+          <b>현재 기본 가설</b><br>
+          “중간 앱이 있으니 없앤다”가 아니라 <b>예약앱이 구조를 단순하게 하는 backend 계층인지</b>부터 확인한다.
+          잘 돌아가고 역할이 명확하다면 유지가 정답일 수 있다.
+          다만 Main Dashboard·Coach/Teacher/Admin 등 향후 사내 대시보드가 늘어날수록 같은 business logic이 각 앱에 복제되기 시작하면 MIGRATE 대상으로 전환한다.
+        </div>
+      </div>
+
+      <div class="card full">
+        <h2>서비스 책임표 · 검진 첫 산출물</h2>
+        <table>
+          <tr><th>서비스</th><th>현재 책임</th><th>점검할 질문</th></tr>
+          <tr><td><b>Homepage</b></td><td>신청/입력 UI</td><td>입력 검증과 payload 전송만 하는가? business logic까지 들고 있는가?</td></tr>
+          <tr><td><b>Main Dashboard</b></td><td>사내 운영 UI</td><td>화면만 담당하는가? DB 직접 쓰기·자동화 trigger까지 수행하는가?</td></tr>
+          <tr><td><b>Reservation App / Railway</b></td><td>현재 중간 실시간 계층</td><td>단순 우회인가? 공통 API/worker/backend 역할인가?</td></tr>
+          <tr><td><b>Supabase</b></td><td>학생/수강권/세션 등 데이터</td><td>source of truth가 하나인가? trigger/function이 핵심 로직을 나눠 갖고 있는가?</td></tr>
+          <tr><td><b>Automation</b></td><td>출결·전사·Recap·알림톡 등</td><td>어디서 trigger되고 누가 재시도/로그/중복방지를 책임지는가?</td></tr>
+        </table>
+        <p class="muted">원칙: <b>대시보드는 늘어나도 business logic의 복제본은 늘어나면 안 된다.</b></p>
+      </div>
+
+      <div class="card">
+        <h2>코드 분류 태그</h2>
+        <p><span class="pill risk-low">KEEP</span> 정상 / 명확 / 필요한 코드</p>
+        <p><span class="pill">DELETE-CANDIDATE</span> 미사용 추정, 삭제 전 참조 검증 필요</p>
+        <p><span class="pill risk-mid">REFACTOR</span> 중복·가독성·결합도 문제</p>
+        <p><span class="pill risk-mid">REVIEW</span> 의도/정책 확인 필요</p>
+        <p><span class="pill risk-high">RISK</span> 오류·중복 실행·데이터 손상 가능성</p>
+        <p><span class="pill risk-high">FIX</span> 명확한 버그/취약점/운영 장애 후보</p>
+      </div>
+
+      <div class="card">
+        <h2>특히 볼 위험 포인트</h2>
+        <ul>
+          <li>같은 자동화가 두 경로에서 중복 실행되는지</li>
+          <li>재시도 시 출결/알림톡/리캡이 중복 생성되는지</li>
+          <li>학생/수강권/세션 상태 변경의 source of truth가 하나인지</li>
+          <li>cron/webhook/event handler가 서로 의존하는 순서</li>
+          <li>실패했는데 성공으로 표시되는 silent failure</li>
+          <li>타임존/수업일자 경계</li>
+          <li>삭제/수정 이벤트에서 연쇄 자동화가 깨지는지</li>
+          <li>Vercel/Railway 환경변수·버전 차이</li>
+          <li>오래된 route/API/env/dependency가 남아 있는지</li>
+        </ul>
+      </div>
+
+      <div class="card full">
+        <h2>내일 검진 순서</h2>
+        <table>
+          <tr><th>순서</th><th>작업</th><th>완료물</th></tr>
+          <tr><td><span class="priority">P0-1</span></td><td>Homepage / Main Dashboard / Reservation App / Supabase / Automation 각각의 <b>책임표</b> 작성</td><td>서비스 책임 맵</td></tr>
+          <tr><td><span class="priority">P0-2</span></td><td>Repo / 앱 / 배포처 / DB / cron / webhook / env 전체 inventory</td><td>시스템 맵</td></tr>
+          <tr><td><span class="priority">P0-3</span></td><td>Homepage → 학생/수강권/세션 → Main Dashboard 데이터 흐름 추적</td><td>입력→저장→표시 흐름</td></tr>
+          <tr><td><span class="priority">P0-4</span></td><td>출결·전사·Recap·알림톡 자동화 dependency 확인</td><td>자동화 DAG + 실패 영향</td></tr>
+          <tr><td><span class="priority">P0-5</span></td><td>수강권 즉시 반영 문제 재현 + Reservation App이 맡는 실시간 역할 추적</td><td>KEEP / REDEFINE / MIGRATE 근거</td></tr>
+          <tr><td><span class="priority">P1</span></td><td>dead/duplicate/risky code 분류</td><td>KEEP / DELETE / REFACTOR / REVIEW / RISK / FIX 목록</td></tr>
+          <tr><td><span class="priority">P1</span></td><td>테스트 없는 핵심 흐름에 smoke test 계획</td><td>회귀 검증 체크리스트</td></tr>
+          <tr><td><span class="priority">P2</span></td><td>정리/마이그레이션 실행 계획</td><td>작은 PR 단위 작업순서 + rollback</td></tr>
+        </table>
+      </div>
+
+      <details class="prompt-card full" open>
+        <summary>MASTER · 전체 코드 검진 프롬프트</summary>
+        <div class="inside"><div class="prompt" id="audit_master">프렌글의 홈페이지와 Desk 솔루션 전체 코드베이스를 ‘수정 전 코드 검진’ 모드로 점검하라.
+
+[서비스 설명]
+- Homepage: 고객 신청/유입이 시작되는 사용자-facing 서비스.
+- Desk: Homepage에서 들어오는 데이터를 받아 학생 데이터와 수강권/세션을 저장하고 스케줄링하는 사내 대시보드.
+- 자동화 연결: 출결, 전사, Recap, 알림톡. 실제 코드에서 Calendar/Meet, 수업 이동/삭제, 세션/코칭 등 추가 연결이 발견되면 모두 포함한다.
+- Main Dashboard는 Vercel 배포.
+- 기존 Reservation App은 Railway 배포.
+- 즉시성이 필요한 backend/worker가 Vercel 쪽에 있어 수강권 등록·리캡 등 즉시 반영 흐름이 매끄럽지 않고, 이를 보완하기 위해 Railway의 Reservation App이 중간 실시간 계층으로 남아 있다.
+- 이 중간 계층 자체를 문제로 간주하지 않는다.
+- 핵심은 Reservation App이 ‘공통 operational backend/API/worker’ 역할을 잘 수행하는지, 아니면 단순 legacy bridge인지 판정하는 것이다.
+- 앞으로 Main Dashboard 중심으로 Coach/Teacher/Admin 등 사내 대시보드가 늘어날 수 있으므로, UI는 늘어나도 business logic이 각 앱에 복제되지 않도록 책임 경계를 명확히 해야 한다.
+
+[절대 원칙]
+1. 첫 단계에서는 대규모 수정/삭제/리팩터링을 하지 않는다.
+2. 먼저 현재 동작 구조를 사실대로 맵핑한다.
+3. 사용처가 불명확한 코드를 ‘안 쓰는 것 같다’는 이유만으로 삭제하지 않는다.
+4. 자동화는 중복 실행, race condition, retry, idempotency, 실패 처리까지 확인한다.
+5. 배포처 변경은 freshness 문제의 원인을 확인한 뒤 결정한다.
+6. 발견한 문제는 심각도와 수정 위험도를 분리해 표시한다.
+
+[0. RESPONSIBILITY MAP]
+가장 먼저 아래 서비스별 책임표를 만든다:
+Homepage / Main Dashboard / Reservation App(Railway) / Supabase / Automation
+
+각 서비스마다:
+- 현재 맡는 책임
+- 실제 business logic
+- DB read/write
+- 외부 API 호출
+- automation trigger
+- 다른 서비스와 중복되는 책임
+- 앞으로 유지해야 할 책임 / 옮겨야 할 책임
+을 정리한다.
+
+[1. INVENTORY]
+아래를 목록화:
+- repo / app / package
+- entry point
+- route / API endpoint
+- DB table / view / function / trigger
+- cron / scheduler
+- webhook
+- queue/worker가 있다면 포함
+- 외부 서비스
+- environment variable 이름(값은 출력하지 않음)
+- deployment target
+- shared module
+- auth/permission layer
+
+[2. DATA FLOW]
+Homepage에서 신청이 들어온 뒤:
+신청 → DB → 학생 생성/수정 → 수강권/세션 → Scheduling → Desk 표시
+흐름을 실제 파일/함수/endpoint 단위로 추적한다.
+
+각 단계별:
+입력 / 출력 / source of truth / 실패 시 영향 / 재시도 여부 / 중복 실행 가능성
+
+[3. AUTOMATION FLOW]
+출결 / 전사 / Recap / 알림톡 및 발견되는 자동화 각각에 대해:
+Trigger → 조건 → 읽는 데이터 → 쓰는 데이터 → 후속 작업 → retry → 실패 처리 → 로그 → 중복 방지
+를 작성한다.
+
+자동화끼리 서로 의존하는 경우 DAG 형태로 설명한다.
+
+[4. CODE CLASSIFICATION]
+각 발견 항목을:
+KEEP / DELETE-CANDIDATE / REFACTOR / REVIEW / RISK / FIX
+중 하나로 태깅한다.
+
+특히 찾을 것:
+- dead code
+- orphan route
+- duplicate logic
+- 오래된 API/컴포넌트
+- 미사용 dependency/env
+- 중복 query
+- 하나의 책임을 여러 파일/서비스가 나눠 가져 혼란스러운 부분
+- 지나치게 강한 coupling
+- race condition
+- transaction이 필요한데 없는 부분
+- idempotency가 필요한 자동화
+- catch 후 무시되는 오류
+- 하드코딩
+- timezone/date boundary 문제
+- 배포환경별 behavior 차이
+
+[5. FRESHNESS + LEGACY BRIDGE AUDIT]
+‘수강권 등록 → Main Dashboard에 즉시 반영’ 경로와 ‘Reservation App을 왜 거쳐야 즉시성이 확보되는지’를 함께 추적한다.
+다음 후보를 각각 확인:
+- DB commit 지연
+- API cache
+- Vercel fetch cache / revalidate
+- client-side query cache
+- state invalidation 누락
+- stale closure/state
+- polling 주기
+- Supabase realtime/subscription 사용 여부와 문제
+- service worker/browser cache
+- Railway API를 거치는 legacy dependency
+- webhook/job 완료 후 UI 갱신 누락
+
+문제 원인을 증거와 함께 좁히고,
+A. KEEP AS-IS: 현재 Reservation App 구조를 그대로 유지
+B. KEEP & REDEFINE: Reservation App을 공통 operational backend/API/worker로 재정의하고 legacy UI/책임만 정리
+C. MIGRATE: 공통 backend로 기능을 이관하고 Reservation App 제거
+세 옵션을 비교한다.
+
+비교 기준:
+실시간성 / 유지보수 / 배포 복잡도 / 비용 / 장애 범위 / 확장성 / 향후 사내 대시보드 공유 가능성 / 마이그레이션 위험.
+
+[6. OUTPUT]
+A. 현재 시스템 아키텍처 요약
+B. 데이터 흐름 맵
+C. 자동화 dependency 맵
+D. 문제 목록 (심각도 / 수정위험도 / 근거 / 위치)
+E. 삭제 후보 목록
+F. 리팩터링 후보 목록
+G. 즉시 수정할 버그/위험
+H. 추가 확인이 필요한 항목
+I. Reservation App 판정: KEEP AS-IS / KEEP & REDEFINE / MIGRATE
+J. 그 판정의 근거와 향후 확장 시 위험
+K. 안전한 수정 순서
+L. 수정 전 필요한 smoke/regression test 목록
+
+아직 확실하지 않은 것은 추정으로 단정하지 말고 ‘확인 필요’로 표시하라.<button class="copy" onclick="copyPrompt('audit_master', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>홈페이지 · 코드 검진</summary>
+        <div class="inside"><div class="prompt" id="audit_home">프렌글 Homepage 코드만 집중 점검한다.
+
+목표:
+사용자 입력이 정확히 수집되고 Desk/DB로 전달되는지, 오래되거나 중복된 코드가 없는지, 향후 변경 시 Desk 자동화에 예상치 못한 영향을 주는 결합이 없는지 확인한다.
+
+점검:
+- 모든 route/page/component
+- 신청 form validation
+- 중복 신청 방지
+- payload shape
+- API 호출
+- error/loading state
+- 성공했지만 저장 실패하는 케이스
+- 중복 submit
+- legacy endpoint
+- environment variable
+- auth/보안
+- analytics/추적 코드가 비즈니스 로직을 방해하는지
+- dead component/dependency
+- Desk와 공유해야 할 schema/type이 중복 선언되어 drift 가능한지
+
+출력:
+시스템 흐름 / KEEP / DELETE-CANDIDATE / REFACTOR / RISK / FIX / REVIEW.
+각 항목마다 파일 경로, 근거, 영향 범위, 권장 다음 행동을 적는다.
+수정은 하지 말고 먼저 진단 보고서를 만든다.<button class="copy" onclick="copyPrompt('audit_home', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>DESK · 데이터/자동화 검진</summary>
+        <div class="inside"><div class="prompt" id="audit_desk">프렌글 Desk 솔루션을 집중 검진한다.
+
+Desk 역할:
+Homepage 데이터를 받아 학생/수강권/세션 데이터를 관리하고 스케줄링하며 출결·전사·Recap·알림톡 등 자동화와 연결되는 핵심 운영 시스템이다.
+
+중점 점검:
+1. Student / enrollment / pass / session / schedule 데이터의 source of truth
+2. 상태값 정의와 상태 전이
+3. 생성/수정/삭제 시 어떤 자동화가 연쇄 실행되는지
+4. 같은 비즈니스 로직이 UI/API/cron 여러 곳에 중복돼 있는지
+5. 수업 이동/삭제/노쇼/보강/undo 같은 예외 흐름
+6. retry와 idempotency
+7. race condition
+8. DB transaction 필요 구간
+9. duplicate row / unique constraint 처리
+10. timezone
+11. logging과 audit trail
+12. 관리자 권한/민감 데이터 노출
+13. legacy Reservation Dashboard 의존
+14. Vercel/Railway 환경 차이
+15. dead/unused/duplicate code
+
+각 기능별로:
+Trigger → 함수/endpoint → DB write/read → 외부 서비스 → 후속 자동화 → 실패 영향
+을 추적하고 dependency map을 만든다.
+
+최종 출력:
+- 운영상 가장 위험한 10개
+- 정리하면 효과가 큰 10개
+- 삭제 후보
+- 리팩터링 후보
+- 지금은 건드리지 않는 게 나은 부분
+- 테스트 없이 수정하면 안 되는 흐름
+- 권장 작업 순서<button class="copy" onclick="copyPrompt('audit_desk', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>AUTOMATION · 엉킴/중복 실행 검진</summary>
+        <div class="inside"><div class="prompt" id="audit_auto">프렌글 자동화만 따로 점검한다.
+
+대상:
+출결 / 전사 / Recap / 알림톡 / Calendar / Meet / 수업 이동·삭제 및 코드에서 발견되는 모든 자동화.
+
+각 자동화마다 다음 표를 만든다:
+이름 | Trigger | 조건 | Input | DB Write | External Action | 다음 자동화 | Retry | Idempotency | 실패 처리 | 로그
+
+특히:
+- 같은 이벤트가 두 번 들어오면 두 번 실행되는가
+- 재시도에서 중복 메시지/Recap/수업 생성이 가능한가
+- 부분 성공 후 재실행 시 데이터가 꼬이는가
+- 실행 순서가 암묵적으로 가정되어 있는가
+- cron과 webhook이 같은 일을 하는가
+- 실패를 catch만 하고 기록하지 않는가
+- 수동 수정이 다음 자동화에 의해 덮이는가
+- 삭제 이벤트가 연쇄 삭제/알림을 잘못 유발하는가
+
+결과는
+SAFE / WATCH / RISK / FIX
+로 분류하고 자동화 dependency DAG를 설명한다.
+첫 검진에서는 코드를 수정하지 않는다.<button class="copy" onclick="copyPrompt('audit_auto', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>FRESHNESS · Vercel vs Railway 판단</summary>
+        <div class="inside"><div class="prompt" id="audit_deploy">Main Dashboard에서 수강권 등록 직후 최신 데이터가 바로 반영되지 않는 문제를 진단하고 Vercel/Railway 배포구조를 판단한다.
+
+현재:
+- Main Dashboard: Vercel
+- Reservation App: Railway
+- 즉시성이 필요한 backend/worker가 Vercel 쪽에 있어 수강권 등록/리캡 등에서 즉시 반영 문제가 있고, Railway Reservation App이 중간 실시간 계층으로 남아 있다.
+- 이 중간 계층은 반드시 제거 대상이 아니다.
+- 앞으로 Main Dashboard 중심으로 사내 대시보드가 늘어날 예정이다.
+
+먼저 다음 경로를 실제 코드로 추적:
+수강권 등록 UI → API/action → DB commit → backend response → cache/revalidation → client state → Main Dashboard render
+
+확인:
+- Vercel fetch/route cache
+- revalidate 설정
+- dynamic/static rendering
+- client query cache와 invalidation
+- refresh/polling
+- Supabase realtime/subscription
+- API response cache header
+- browser/service worker cache
+- DB transaction/commit
+- Railway legacy API 의존
+- 동일 데이터에 서로 다른 endpoint/schema를 쓰는지
+
+원인을 특정한 뒤 아래 3개를 비교:
+A. KEEP AS-IS — 현재 구조 유지
+B. KEEP & REDEFINE — Railway Reservation App을 공통 operational backend/API/worker로 재정의하고 legacy UI/중복 책임만 제거
+C. MIGRATE — 공통 backend로 기능 이관 후 Reservation App 제거
+
+평가표:
+실시간성 / 단순성 / 배포·롤백 / 비용 / 운영 난이도 / 확장성 / background job / websocket / 장애 격리 / 향후 여러 dashboard의 공통 backend 사용.
+
+최종적으로:
+- KEEP AS-IS / KEEP & REDEFINE / MIGRATE 중 권장안
+- 왜 그런지
+- Reservation App이 구조를 단순화하는지 복잡화하는지
+- 기존 UI/legacy 부분만 제거할 수 있는 조건
+- 향후 Dashboard가 늘어날 때 business logic이 복제될 위험
+- 마이그레이션이 필요하다면 단계
+- rollback 방법
+을 적는다.
+
+‘중간 서비스가 하나 더 있다’는 이유만으로 제거를 권하지 말고,
+서비스 책임·중복 로직·장애지점·확장성을 근거로 판단한다.<button class="copy" onclick="copyPrompt('audit_deploy', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>REFACTOR · 검진 후 안전 정리</summary>
+        <div class="inside"><div class="prompt" id="audit_refactor">이 코드 검진 보고서를 바탕으로 안전한 정리 계획을 만든다.
+
+원칙:
+- 한 번에 큰 리팩터링 금지.
+- 기능 변경과 구조 정리를 같은 PR에서 섞지 않는다.
+- 자동화 핵심 흐름에는 수정 전 테스트/로그를 먼저 확보한다.
+- 삭제 후보는 import/reference/route/runtime usage를 확인한 뒤 삭제한다.
+- DB schema/API contract 변경은 소비하는 모든 앱을 확인한다.
+- 각 단계마다 rollback 가능해야 한다.
+
+우선순위:
+P0: 데이터 손상/중복 실행/보안/운영 장애
+P1: freshness/legacy bridge/중복 로직
+P2: dead code/구조 정리/이름 정리
+P3: 미관상 리팩터링
+
+출력:
+PR 단위로
+목적 / 수정 파일 / 영향 기능 / 선행 테스트 / 작업 내용 / 검증 방법 / rollback / 다음 단계
+를 적는다.
+
+향후 여러 사내 dashboard가 늘어날 것을 고려해
+- shared type/schema
+- common auth
+- shared API layer
+- background worker
+- logging/audit
+의 책임 경계를 제안한다.<button class="copy" onclick="copyPrompt('audit_refactor', this)">복사</button></div></div>
+      </details>
+
+      <div class="card full">
+        <h2>내일 최종 산출물 — 여기까지만 나오면 성공</h2>
+        <label class="check"><input type="checkbox" data-key="ca1"><span>Homepage / Main Dashboard / Reservation App / Supabase / Automation 각각의 책임표 완성</span></label>
+        <label class="check"><input type="checkbox" data-key="ca2"><span>수강권 즉시 반영이 안 되는 정확한 경로와 Reservation App이 즉시성을 확보하는 이유 파악</span></label>
+        <label class="check"><input type="checkbox" data-key="ca3"><span>Reservation App을 KEEP AS-IS / KEEP &amp; REDEFINE / MIGRATE 중 하나로 판정</span></label>
+        <label class="check"><input type="checkbox" data-key="ca4"><span>KEEP / DELETE / REFACTOR / REVIEW / RISK / FIX 분류표</span></label>
+        <label class="check"><input type="checkbox" data-key="ca5"><span>대규모 수정 전 필요한 smoke/regression test 목록</span></label>
+        <label class="check"><input type="checkbox" data-key="ca6"><span>향후 Dashboard가 늘어나도 business logic이 복제되지 않는 공통 구조 방향 결정</span></label>
+      </div>
+    </div>
+  </section>
+
+  
+  <section id="automation">
+    <div class="grid">
+      <div class="card full">
+        <h2>AUTOMATION / DECISION BRIEFING</h2>
+        <p>자동화의 목표는 데이터를 많이 모으는 것이 아니라 <b>“무엇이 이상한지, 무엇을 바꿔야 하는지”까지 압축해서 사람이 판단만 하게 만드는 것</b>.</p>
+        <div class="flow">
+          <div class="node">데이터 수집</div><div class="arrow">→</div>
+          <div class="node">정리/검증</div><div class="arrow">→</div>
+          <div class="node">비교/이상징후</div><div class="arrow">→</div>
+          <div class="node">원인 후보</div><div class="arrow">→</div>
+          <div class="node">오늘/이번 주 액션</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>현재 이미 자동화된 것</h2>
+        <ul>
+          <li>업무일지 자동 기록</li>
+          <li>11시 운영 점검 브리핑</li>
+          <li>리캡/알림톡 등 자동화 시스템 상태 확인</li>
+          <li>콘텐츠 생성·멀티채널 가공 일부 자동화</li>
+          <li>시장조사 브리핑</li>
+        </ul>
+        <p class="muted">앞으로는 “기록/수집”보다 “판단 보조” 쪽 자동화 비중을 높인다.</p>
+      </div>
+
+      <div class="card">
+        <h2>시장조사 운영 원칙</h2>
+        <p>매일 경쟁사 뉴스 요약은 우선순위를 낮춘다.</p>
+        <p><b>월 1회 + 이벤트 감지형</b>으로 전환:</p>
+        <div class="pill">가격 변경</div>
+        <div class="pill">무료체험 정책</div>
+        <div class="pill">B2B 상품</div>
+        <div class="pill">코칭/습관 기능</div>
+        <div class="pill">대형 프로모션</div>
+        <p class="muted">프렌글의 다음 액션이 달라질 정도의 변화만 알림.</p>
+      </div>
+
+      <div class="card full">
+        <h2>자동 브리핑 우선순위</h2>
+        <table>
+          <tr><th>우선</th><th>브리핑</th><th>핵심 질문</th><th>권장 주기</th></tr>
+          <tr><td><b>1</b></td><td>Trial Funnel Brief</td><td>신청→출석→4회 완료→정규 전환 중 어디서 새는가?</td><td>주 1회 + 월간</td></tr>
+          <tr><td><b>2</b></td><td>B2B Pipeline Brief</td><td>어떤 소스/업종/규모에서 유효 연락처와 회신이 잘 나오는가?</td><td>주 1회</td></tr>
+          <tr><td><b>3</b></td><td>Content Performance Brief</td><td>어떤 유형/훅/채널이 도달·공유·저장을 만드는가?</td><td>주 1회</td></tr>
+          <tr><td><b>4</b></td><td>Ops Exception Brief</td><td>정상건은 숨기고 사람이 봐야 할 예외만 무엇인가?</td><td>매일 11시</td></tr>
+          <tr><td><b>5</b></td><td>Capacity Brief</td><td>어느 시간대/강사/요일이 병목이 되는가?</td><td>주 1회</td></tr>
+          <tr><td><b>6</b></td><td>SEO Coverage Brief</td><td>칼럼·블로그·클립에서 비어 있는 검색 주제가 무엇인가?</td><td>격주/월간</td></tr>
+        </table>
+      </div>
+
+      <details class="prompt-card full" open>
+        <summary>MASTER · Monday Growth Brief</summary>
+        <div class="inside"><div class="prompt" id="brief_growth">프렌글의 이번 주 Growth Brief를 작성한다.
+
+[목표]
+데이터를 나열하지 말고 이번 주 우선순위 Top 3를 숫자로 결정한다.
+
+[입력 데이터]
+- Trial 신청/출석/4회 완료/정규 전환
+- B2B 후보/검증/컨택/회신/긍정 회신
+- Instagram / YouTube / Naver Clip / Blog / Column 성과
+- 운영 예외(출결/리캡/알림톡/스케줄)
+- 필요하면 강사 capacity
+
+[출력]
+1. 지난주 대비 핵심 변화 5개
+2. 가장 큰 성장 기회 3개
+3. 가장 큰 누수/병목 3개
+4. 이번 주 Top 3 액션
+5. 각 액션의 예상 영향과 필요한 시간
+6. 이번 주에는 미뤄도 되는 일
+7. 추가로 수집해야 할 데이터
+
+규칙:
+- 숫자 없는 감상 금지
+- 원인을 단정하지 말고 데이터가 부족하면 ‘가설’로 표시
+- 실행 가능한 제안만 남긴다
+- 정상적으로 굴러가는 영역은 길게 설명하지 않는다<button class="copy" onclick="copyPrompt('brief_growth', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>TRIAL · 전환 퍼널 브리핑</summary>
+        <div class="inside"><div class="prompt" id="brief_trial">프렌글 Trial Funnel Brief를 작성한다.
+
+[퍼널]
+신청 → 1회 출석 → 2회 출석 → 3회 출석 → 4회 완료 → 정규 전환
+
+[분석]
+- 단계별 인원/전환율
+- 전주/전월 대비
+- 첫 수업 No-show
+- 4회 완료 후 미전환
+- 요일/시간대/강사별 차이
+- Teacher only / Teacher+Coach 차이
+- 유입 채널 차이가 있으면 포함
+
+[출력]
+- 퍼널 요약
+- 가장 큰 이탈 구간
+- 의미 있는 세그먼트 차이
+- 원인 가설
+- 이번 주 실험 1~3개
+- 추가로 추적해야 할 데이터
+
+표본이 작으면 과도한 결론을 내리지 않는다.<button class="copy" onclick="copyPrompt('brief_trial', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>B2B · 파이프라인 브리핑</summary>
+        <div class="inside"><div class="prompt" id="brief_b2b">프렌글 B2B Pipeline Brief를 작성한다.
+
+[분석 대상]
+후보 수 / 검증 통과 / 이메일 확인 / 전화 확인 / 컨택 / 회신 / 긍정 / 미팅 / 제휴
+
+[반드시 나눠 볼 기준]
+- 수집 소스
+- 업종
+- 기업 규모
+- 해외영업/글로벌 직무 채용 여부
+- 연락 방식(메일/전화/기타)
+- 대표메일/HR/담당자 메일 유형
+
+[출력]
+1. 이번 주 파이프라인 요약
+2. 소스별 유효 연락처율
+3. 세그먼트별 회신/긍정률
+4. 비효율 소스/세그먼트
+5. 다음 수집 100개 배분안
+6. 후속 연락이 필요한 리스트 조건
+7. 다음 주 테스트할 아웃리치 가설
+
+후보를 많이 모았다는 사실보다 ‘연락 가능한 DB’와 ‘반응’을 우선한다.<button class="copy" onclick="copyPrompt('brief_b2b', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>CONTENT · 성과 브리핑</summary>
+        <div class="inside"><div class="prompt" id="brief_content">프렌글 주간 Content Performance Brief를 작성한다.
+
+콘텐츠를 CELEB / LEARN / SITUATION / BRAND로 분류한다.
+
+[채널]
+Instagram / YouTube Shorts / Naver Clip / Naver Blog / Frengle Column
+
+[지표]
+- Reach / Views
+- 비팔로워 도달
+- Shares / Reach
+- Saves / Reach
+- Profile Visits
+- Follows
+- CTA 반응
+- 검색 유입이 있으면 포함
+
+[분석]
+- 유형별 성과
+- 훅 유형별 성과: 번역형 / 상황형 / 반전형 / 감정형 / 검색형
+- 채널별로 잘 먹히는 포맷
+- 동일 소재를 여러 채널에 가공했을 때 성과 차이
+
+[출력]
+- 이번 주 승자/패자
+- 왜 그런지에 대한 데이터 기반 가설
+- 다음 주 콘텐츠 비중
+- 계속할 훅 패턴
+- 중단/축소할 패턴
+- 다음 주 테스트 3개
+
+조회수만으로 평가하지 말고 각 콘텐츠의 역할(도달/공유/저장/검색/전환)을 기준으로 평가한다.<button class="copy" onclick="copyPrompt('brief_content', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>OPS · 예외 전용 11시 브리핑</summary>
+        <div class="inside"><div class="prompt" id="brief_ops">프렌글 오전 11시 Ops Exception Brief를 작성한다.
+
+[원칙]
+정상적으로 처리된 건은 상세 나열하지 않는다.
+사람이 확인해야 할 예외와 자동 복구 실패만 보여준다.
+
+[대상]
+- 출결
+- Meet/Calendar
+- 전사
+- Recap
+- 알림톡
+- 학생/수강권/세션 상태 불일치
+- 자동화 실패/retry
+- 기타 운영 시스템
+
+[출력]
+1. 정상 처리 총 건수
+2. 확인 필요 건수
+3. 각 예외: 학생/세션/시각/문제/현재 상태/자동 복구 여부
+4. 사람이 직접 조치해야 하는 항목
+5. 반복 발생 패턴
+6. 자동화 개선 후보
+
+심각도:
+INFO / WATCH / ACTION / URGENT
+
+정상 항목은 한 줄 요약만 한다.<button class="copy" onclick="copyPrompt('brief_ops', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>CAPACITY · 강사/시간대 병목</summary>
+        <div class="inside"><div class="prompt" id="brief_capacity">프렌글 Teaching Capacity Brief를 작성한다.
+
+[분석]
+- 강사별 가능 슬롯
+- 예약률
+- 요일/시간대별 점유율
+- Trial 수요
+- 보강/이동 세션
+- 특정 강사 편중
+- 향후 2주 예상 병목
+
+[출력]
+- 가장 붐비는 시간대
+- 여유 시간대
+- 강사별 병목 위험
+- Trial 유입 증가 시 부족해질 슬롯
+- 스케줄 조정/채용/시간 확장 필요 여부
+- 다음 2주 리스크
+
+숫자가 부족하면 필요한 데이터부터 명시한다.<button class="copy" onclick="copyPrompt('brief_capacity', this)">복사</button></div></div>
+      </details>
+
+      <div class="card full">
+        <h2>자동화 원칙</h2>
+        <table>
+          <tr><th>자동화하기 좋은 것</th><th>사람이 남겨야 하는 것</th></tr>
+          <tr><td>수집 / 중복제거 / 검증 / 집계 / 이상징후 탐지 / 반복 리포트</td><td>우선순위 / 원인 확정 / 정책 예외 / 브랜드 방향 / 최종 액션 승인</td></tr>
+          <tr><td>정상 여부 확인</td><td>정책을 바꾸는 결정</td></tr>
+          <tr><td>다음 액션 후보 추천</td><td>실제로 무엇을 할지 선택</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="mdsystem">
+    <div class="grid">
+      <div class="card full">
+        <h2>MD SYSTEM · 프렌글 운영 기준서</h2>
+        <p>MD 파일은 숫자 데이터를 저장하는 곳이 아니라 <b>“이 데이터를 어떻게 해석하고, 어떤 규칙으로 일할지”를 고정하는 곳</b>.</p>
+        <div class="note">500개 기업 목록 → Sheet/DB · 학생 데이터 → Supabase · 성과 숫자 → Sheet/DB · <b>업무 규칙/정책/구조/의사결정 → MD</b></div>
+      </div>
+
+      <div class="card full">
+        <h2>추천 구조</h2>
+        <div class="prompt" id="md_tree">/frengle
+  MASTER.md
+  BUSINESS_RULES.md
+  CONTENT_RULES.md
+  B2B_RULES.md
+  OPS_RUNBOOK.md
+  DATA_DICTIONARY.md
+  ARCHITECTURE.md
+  DECISION_LOG.md<button class="copy" onclick="copyPrompt('md_tree', this)">복사</button></div>
+      </div>
+
+      <div class="card">
+        <h2>MASTER.md</h2>
+        <p>프렌글 전체 설명 + 현재 목표 + 서비스 구조 + 각 MD 파일 안내.</p>
+      </div>
+      <div class="card">
+        <h2>BUSINESS_RULES.md</h2>
+        <p>Trial 4회, No-show, Coach, 수강권, 운영 정책처럼 절대 헷갈리면 안 되는 기준.</p>
+      </div>
+      <div class="card">
+        <h2>CONTENT_RULES.md</h2>
+        <p>Content Router, 문체, 채널 역할, 훅 규칙, 재활용 기준.</p>
+      </div>
+      <div class="card">
+        <h2>B2B_RULES.md</h2>
+        <p>타깃 기업, 제외 기준, 검증 조건, DB 통과 조건, 컨택 규칙.</p>
+      </div>
+      <div class="card">
+        <h2>OPS_RUNBOOK.md</h2>
+        <p>Recap/출결/Meet/알림톡 등 운영 오류 발생 시 확인 순서와 대응법.</p>
+      </div>
+      <div class="card">
+        <h2>DATA_DICTIONARY.md</h2>
+        <p>student/session/pass/status 등 데이터 필드와 상태값의 정확한 의미.</p>
+      </div>
+      <div class="card">
+        <h2>ARCHITECTURE.md</h2>
+        <p>Homepage / Main Dashboard / Railway / Supabase / Automation 책임 구조와 데이터 흐름.</p>
+      </div>
+      <div class="card">
+        <h2>DECISION_LOG.md</h2>
+        <p>왜 이 구조/정책을 선택했는지, 언제 재검토할지를 날짜별로 기록.</p>
+      </div>
+
+      <details class="prompt-card full" open>
+        <summary>MASTER · MD 파일 생성 프롬프트</summary>
+        <div class="inside"><div class="prompt" id="md_generate">프렌글 프로젝트의 운영 기준 MD 파일을 생성/정리한다.
+
+[원칙]
+- 숫자 데이터 자체는 MD에 저장하지 않는다.
+- 정책, 정의, 구조, 업무 규칙, 의사결정 근거를 저장한다.
+- 확인되지 않은 내용을 사실처럼 쓰지 않는다.
+- 서로 다른 MD에 같은 규칙을 중복해서 쓰지 말고 source of truth를 하나 정한다.
+- 다른 문서에서 필요한 경우 링크로 참조한다.
+
+[생성 대상]
+MASTER.md
+BUSINESS_RULES.md
+CONTENT_RULES.md
+B2B_RULES.md
+OPS_RUNBOOK.md
+DATA_DICTIONARY.md
+ARCHITECTURE.md
+DECISION_LOG.md
+
+각 파일마다:
+1. 목적
+2. 포함할 내용
+3. 포함하지 않을 내용
+4. 현재 확보된 정보
+5. 확인이 필요한 정보
+6. 다른 MD와의 연결
+을 먼저 설계한 뒤 본문을 작성한다.
+
+특히:
+- DATA_DICTIONARY.md는 상태값/필드/관계 정의를 명확히
+- ARCHITECTURE.md는 서비스별 책임과 데이터 흐름을 명확히
+- DECISION_LOG.md는 날짜 / 결정 / 이유 / 영향 / 재검토 조건 형식을 사용한다.<button class="copy" onclick="copyPrompt('md_generate', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>ARCHITECTURE.md · 코드 검진 후</summary>
+        <div class="inside"><div class="prompt" id="md_arch">코드 검진 결과를 바탕으로 ARCHITECTURE.md를 작성한다.
+
+반드시 포함:
+- 시스템 목적
+- Homepage 책임
+- Main Dashboard 책임
+- Reservation App / Railway 책임
+- Supabase 책임
+- 각 자동화 책임
+- 주요 데이터 흐름
+- 실시간 처리 경로
+- cron/reconciliation 경로
+- source of truth
+- 외부 서비스
+- 서비스 간 금지된 책임 중복
+- 향후 Dashboard가 늘어날 때 따라야 할 규칙
+
+현재 확인되지 않은 부분은 TODO/확인 필요로 표시한다.
+코드 구현보다 ‘책임 경계’를 가장 명확히 적는다.<button class="copy" onclick="copyPrompt('md_arch', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>DATA_DICTIONARY.md · 데이터 정의</summary>
+        <div class="inside"><div class="prompt" id="md_data">프렌글 코드/DB를 기준으로 DATA_DICTIONARY.md를 작성한다.
+
+대상:
+Student / Trial / Enrollment / Pass / Session / Schedule / Attendance / Transcript / Recap / Coach / Teacher 및 발견되는 핵심 엔티티.
+
+각 엔티티마다:
+- 목적
+- key/id
+- 핵심 필드
+- 상태값 enum
+- 상태값의 정확한 의미
+- 생성/변경 주체
+- 다른 엔티티와 관계
+- source of truth
+- deprecated/legacy field
+- 변경 시 영향을 받는 자동화
+
+특히 같은 의미인데 이름이 다른 필드나, 이름은 같지만 의미가 다른 필드를 표시한다.
+추측 금지. 코드/DB 근거가 없으면 확인 필요로 둔다.<button class="copy" onclick="copyPrompt('md_data', this)">복사</button></div></div>
+      </details>
+
+      <details class="prompt-card">
+        <summary>DECISION_LOG.md · 의사결정 기록</summary>
+        <div class="inside"><div class="prompt" id="md_decision">프렌글의 주요 기술/운영 의사결정을 DECISION_LOG.md 형식으로 기록한다.
+
+형식:
+
+## YYYY-MM-DD — 결정 제목
+
+### 결정
+무엇을 결정했는가
+
+### 배경
+왜 이 결정을 검토했는가
+
+### 선택 이유
+왜 이 안을 선택했는가
+
+### 포기한 대안
+어떤 대안을 검토했고 왜 선택하지 않았는가
+
+### 영향
+어떤 서비스/업무가 영향을 받는가
+
+### 재검토 조건
+어떤 상황이 오면 다시 검토할 것인가
+
+---
+
+예:
+Reservation App을 즉시 제거하지 않고 KEEP & REDEFINE로 유지하는 경우,
+Railway backend의 실제 역할과 향후 제거/재검토 조건까지 기록한다.<button class="copy" onclick="copyPrompt('md_decision', this)">복사</button></div></div>
+      </details>
+
+      <div class="card full">
+        <h2>앞으로 작업 시작 문장</h2>
+        <div class="prompt" id="md_workflow">이 작업을 시작하기 전에 먼저 /docs/MASTER.md를 읽고,
+이번 작업과 직접 관련된 MD 파일을 추가로 읽어라.
+
+- 코드 작업 → ARCHITECTURE.md + DATA_DICTIONARY.md + BUSINESS_RULES.md
+- 콘텐츠 작업 → CONTENT_RULES.md
+- B2B 수집/영업 → B2B_RULES.md
+- 운영 오류 대응 → OPS_RUNBOOK.md
+
+기존 정책/데이터 정의/책임 구조와 충돌하는 변경을 임의로 만들지 않는다.
+충돌이 발견되면 수정 전에 어떤 기준과 충돌하는지 먼저 보고한다.<button class="copy" onclick="copyPrompt('md_workflow', this)">복사</button></div>
+      </div>
+
+      <div class="card full">
+        <h2>MD 구축 우선순위</h2>
+        <table>
+          <tr><th>순서</th><th>파일</th><th>언제</th></tr>
+          <tr><td><b>1</b></td><td>ARCHITECTURE.md</td><td>내일 코드 검진 직후</td></tr>
+          <tr><td><b>2</b></td><td>DATA_DICTIONARY.md</td><td>코드/DB 구조 확인 직후</td></tr>
+          <tr><td><b>3</b></td><td>BUSINESS_RULES.md</td><td>현재 운영 정책 정리</td></tr>
+          <tr><td><b>4</b></td><td>CONTENT_RULES.md</td><td>현재 Content Router를 기준으로</td></tr>
+          <tr><td><b>5</b></td><td>B2B_RULES.md</td><td>수집/검증 파이프라인 고정</td></tr>
+          <tr><td><b>6</b></td><td>OPS_RUNBOOK.md</td><td>반복 오류 케이스가 쌓일 때</td></tr>
+          <tr><td><b>7</b></td><td>MASTER.md + DECISION_LOG.md</td><td>위 파일 연결 및 의사결정 누적</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="b2b">
+    <div class="grid">
+      <div class="card full">
+        <h2>B2B 목표 구조</h2>
+        <div class="flow">
+          <div class="node">후보군 1,000+</div><div class="arrow">→</div>
+          <div class="node">50~100개 배치 검증</div><div class="arrow">→</div>
+          <div class="node">유효 연락처 확인</div><div class="arrow">→</div>
+          <div class="node">MASTER 추가</div><div class="arrow">→</div>
+          <div class="node">아웃리치</div><div class="arrow">→</div>
+          <div class="node">후속관리</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>우선 타깃</h2>
+        <div class="pill">해외영업</div><div class="pill">글로벌 마케팅</div><div class="pill">무역</div>
+        <div class="pill">해외사업</div><div class="pill">개발</div><div class="pill">게임</div>
+        <div class="pill">벤더사</div><div class="pill">스타트업</div><div class="pill">글로벌 커뮤니케이션</div>
+        <p class="muted">연락 포인트가 있는 기업이면 모수를 넓게. 대행사·폐업·개인·중복은 제외.</p>
+      </div>
+
+      <div class="card">
+        <h2>최종 DB 통과 조건</h2>
+        <label class="check"><input type="checkbox" data-key="b1"><span>기업 실재 여부 확인</span></label>
+        <label class="check"><input type="checkbox" data-key="b2"><span>공식 홈페이지 또는 신뢰 가능한 기업 페이지 존재</span></label>
+        <label class="check"><input type="checkbox" data-key="b3"><span>이메일 또는 전화번호 확인</span></label>
+        <label class="check"><input type="checkbox" data-key="b4"><span>연락처 출처 URL 확보</span></label>
+        <label class="check"><input type="checkbox" data-key="b5"><span>중복 / 폐업 / 제외업종 아님</span></label>
+      </div>
+
+      <div class="card full">
+        <h2>B2B MASTER 열 구조</h2>
+        <table>
+          <tr><th>구분</th><th>필드</th></tr>
+          <tr><td>기본</td><td>회사명 / 홈페이지 / 업종 / 규모 / 타깃 이유</td></tr>
+          <tr><td>연락</td><td>이메일 / 이메일 유형 / 전화번호 / 담당부서 / 담당자</td></tr>
+          <tr><td>검증</td><td><b>연락처 출처 URL</b> / 확인일 / 검증상태</td></tr>
+          <tr><td>영업</td><td>컨택상태 / 최초 컨택일 / 회신여부 / 후속일 / 메모</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>배치 성과 기록</h2>
+        <ul>
+          <li>후보 수</li>
+          <li>최종 통과 수</li>
+          <li>이메일 확인률</li>
+          <li>전화번호 확인률</li>
+          <li>중복 제거 수</li>
+          <li>제외 사유별 개수</li>
+          <li>소스별 유효율</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>소스 운영 원칙</h2>
+        <p>처음엔 넓게 수집하고, 3~5회 배치 후 <b>유효 연락처율이 높은 소스에 수집량을 집중</b>.</p>
+        <p class="muted">목표는 “많이 모으기”가 아니라 “연락 가능한 DB를 많이 확보하기”.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="blog">
+    <div class="grid">
+      <div class="card">
+        <h2>블로그 역할</h2>
+        <p>검색 유입 + 콘텐츠 재활용 저장소.</p>
+        <p class="muted">이미 만든 캐러셀/칼럼 소재를 다시 처음부터 쓰지 않는다.</p>
+      </div>
+      <div class="card">
+        <h2>Work에 넘길 것</h2>
+        <ul>
+          <li>원고 정리</li>
+          <li>제목/소제목 구조화</li>
+          <li>이미지 배치</li>
+          <li>에디터 세팅</li>
+          <li>업로드 전 최종 체크</li>
+        </ul>
+      </div>
+      <div class="card full">
+        <h2>멀티채널 변환 구조</h2>
+        <div class="flow">
+          <div class="node">원본 소재 1개</div><div class="arrow">→</div>
+          <div class="node">Instagram Carousel</div><div class="arrow">→</div>
+          <div class="node">Reels / Shorts</div><div class="arrow">→</div>
+          <div class="node">Naver Clip</div><div class="arrow">→</div>
+          <div class="node">Blog</div><div class="arrow">→</div>
+          <div class="node">Frengle Column</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ops">
+    <div class="grid">
+      <div class="card">
+        <h2>매일</h2>
+        <label class="check"><input type="checkbox" data-key="o1"><span>수업/링크/출결/리캡 이상 여부 확인</span></label>
+        <label class="check"><input type="checkbox" data-key="o2"><span>당일 컨텐츠 게시/예약 확인</span></label>
+        <label class="check"><input type="checkbox" data-key="o3"><span>B2B 배치 진행상황 확인</span></label>
+      </div>
+      <div class="card">
+        <h2>매주</h2>
+        <label class="check"><input type="checkbox" data-key="o4"><span>콘텐츠 성과 Top / Bottom 비교</span></label>
+        <label class="check"><input type="checkbox" data-key="o5"><span>B2B 소스별 유효율 비교</span></label>
+        <label class="check"><input type="checkbox" data-key="o6"><span>자동화 오류/수동 개입 지점 기록</span></label>
+      </div>
+      <div class="card full">
+        <h2>운영 원칙</h2>
+        <p><b>반복적으로 사람이 개입한 지점은 다음 자동화 후보.</b> 단, 고객 커뮤니케이션·정책 예외·브랜드 판단은 자동화보다 기록과 승인 플로우를 우선한다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="grid">
+      <div class="card third"><h3>ChatGPT / Work</h3><p>리서치, 검증, 업로드, 브라우저 기반 반복 작업, 최종 문서화.</p></div>
+      <div class="card third"><h3>Aside</h3><p>B2B 후보군을 넓게 모으는 수집 역할. 정확도보다 모수 확보.</p></div>
+      <div class="card third"><h3>Claude Code / CoWork</h3><p>코딩, 반복 생성 로직, 콘텐츠 생산 파이프라인 구현.</p></div>
+      <div class="card third"><h3>Canva MASTER</h3><p>디자인 일관성 유지. 사람은 레이아웃보다 최종 훅/이미지 선택에 집중.</p></div>
+      <div class="card third"><h3>Metricool</h3><p>성과 수집. 도달만 보지 말고 공유/저장/비팔로워 도달을 함께 기록.</p></div>
+      <div class="card third"><h3>MASTER 파일</h3><p>모든 도구의 기준점. 프롬프트·규칙·DB 스키마·판단 기준을 여기서 통일.</p></div><div class="card third"><h3>Code Audit</h3><p>수정 전에 구조·데이터 흐름·자동화 의존성을 먼저 검진하고 작은 PR로 정리.</p></div><div class="card third"><h3>Decision Briefing</h3><p>Trial/B2B/콘텐츠/운영 데이터를 “이상징후 → 다음 액션”으로 자동 요약.</p></div><div class="card third"><h3>MD System</h3><p>정책·데이터 정의·아키텍처·의사결정을 장기 기준서로 고정.</p></div>
+    </div>
+  </section>
+
+  <section id="prompts">
+    <div class="grid">
+      <div class="card full">
+        <h2>1. 콘텐츠 훅 생성</h2>
+        <div class="prompt" id="p1">프렌글 인스타그램용 영어 콘텐츠를 기획한다.
+
+[입력]
+- 주제:
+- 핵심 영어 표현:
+- 타깃:
+- 사용 가능한 이미지/영상:
+
+[목표]
+첫 장에서 영어 공부 콘텐츠처럼 보이기보다 “내 얘기 같다 / 이 상황 안다 / 뭐지?”라는 반응을 먼저 만든다.
+
+[훅 생성 규칙]
+1. 상황형 2개
+2. 반전형 2개
+3. 감정형 1개
+4. “OO 영어로 뭐라고 하지?” 형식은 기본값으로 쓰지 않는다.
+5. 한국인이 실제로 입 밖으로 낼 법한 문장으로 쓴다.
+6. 너무 교과서적이거나 광고 같은 문장은 제외한다.
+
+각 훅에 대해
+- 왜 멈춰볼 만한지
+- 어떤 포맷(캐러셀/릴스)에 더 적합한지
+- 예상 역할(도달/공유/저장/전환)
+을 함께 적어라.
+
+마지막에 가장 강한 훅 1개를 추천하되, 나머지도 버리지 말고 테스트 후보로 남겨라.<button class="copy" onclick="copyPrompt('p1', this)">복사</button></div>
+      </div>
+
+      <div class="card full">
+        <h2>2. B2B 후보 수집</h2>
+        <div class="prompt" id="p2">프렌글 B2B 제휴 후보 기업을 수집한다.
+
+[타깃]
+해외영업, 글로벌마케팅, 무역, 해외사업, 개발, 게임, 벤더, 스타트업 등 영어 활용 가능성이 있는 기업.
+
+[원칙]
+- 모수를 넓게 잡는다.
+- 대행사, 폐업, 개인사업자, 중복은 제외한다.
+- 연락처가 전혀 확인되지 않는 기업은 최종 후보로 넣지 않는다.
+- 회사명만 나열하지 말고 홈페이지/기업페이지 근거를 남긴다.
+
+[출력 필드]
+회사명 / 홈페이지 / 업종 / 규모 추정 / 타깃 이유 / 이메일 / 이메일 유형 / 전화번호 / 담당부서 또는 담당자 / 출처 URL / 확인일 / 검증상태
+
+우선 100개 단위로 수집하고, 이후 별도 검증 단계로 넘긴다.<button class="copy" onclick="copyPrompt('p2', this)">복사</button></div>
+      </div>
+
+      <div class="card full">
+        <h2>3. B2B 검증</h2>
+        <div class="prompt" id="p3">아래 B2B 후보 기업을 검증한다.
+
+[검증 조건]
+1. 실제 운영 중인 기업인가
+2. 공식 홈페이지 또는 신뢰 가능한 기업 페이지가 있는가
+3. 공개 업무용 이메일 또는 전화번호가 확인되는가
+4. 연락처 출처 URL을 확보할 수 있는가
+5. 중복/폐업/제외업종이 아닌가
+
+[판정]
+- VERIFIED: 최종 DB 진입
+- REVIEW: 기업은 적합하지만 연락처/정보 추가 확인 필요
+- REJECT: 폐업, 중복, 연락처 없음, 제외업종 등
+
+[반드시 집계]
+후보 수 / VERIFIED 수 / REVIEW 수 / REJECT 수 /
+이메일 확인률 / 전화번호 확인률 / 중복 수 / 제외 사유별 수
+
+추측으로 이메일이나 전화번호를 만들지 않는다.<button class="copy" onclick="copyPrompt('p3', this)">복사</button></div>
+      </div>
+
+      <div class="card full">
+        <h2>4. 주간 콘텐츠 성과 분석</h2>
+        <div class="prompt" id="p4">이번 주 프렌글 콘텐츠 성과를 비교한다.
+
+조회수만으로 평가하지 말고 아래를 함께 본다.
+- 비팔로워 도달
+- 공유/도달
+- 저장/도달
+- 프로필 방문
+- 팔로우
+- CTA 반응
+
+콘텐츠를
+1) 셀럽/화제형
+2) 상황/밈형
+3) 실전 표현형
+4) 서비스/전환형
+으로 분류한다.
+
+각 유형별로 무엇이 먹혔는지, 무엇이 약했는지 분석하고
+다음 주 콘텐츠 비중과 테스트할 훅 패턴을 추천한다.
+
+중요:
+성과가 낮다고 무조건 포맷을 폐기하지 말고,
+그 콘텐츠가 맡은 역할(도달/공유/저장/전환)을 기준으로 평가한다.<button class="copy" onclick="copyPrompt('p4', this)">복사</button></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll('.tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+
+  function copyPrompt(id, btn){
+    const box=document.getElementById(id);
+    const clone=box.cloneNode(true);
+    const b=clone.querySelector('button'); if(b) b.remove();
+    navigator.clipboard.writeText(clone.innerText.trim()).then(()=>{
+      const old=btn.textContent; btn.textContent='복사됨';
+      setTimeout(()=>btn.textContent=old,1200);
+    });
+  }
+
+  document.querySelectorAll('input[type="checkbox"][data-key]').forEach(cb=>{
+    const key='frengle_master_'+cb.dataset.key;
+    cb.checked=localStorage.getItem(key)==='1';
+    cb.addEventListener('change',()=>localStorage.setItem(key,cb.checked?'1':'0'));
+  });
+</script>
+</body>
+</html>
